@@ -1,0 +1,18 @@
+[
+  {
+    "route": "/cake",
+    "interval": 3,
+    "data": {
+      "id": 3,
+      "paid": true
+    }
+  },
+  {
+    "route": "/pie",
+    "interval": 3,
+    "data": {
+      "id": 3,
+      "paid": false
+    }
+  }
+]
