@@ -9,18 +9,20 @@ import (
 
 const configPath = "./config.json"
 
+type UnknownJSON = map[string]*json.RawMessage
+
 type Config interface {
 	stringify() string
 }
 
 type WSConfig struct {
-	Route    string                      `json:"route"`
-	Interval int                         `json:"interval"`
-	Data     map[string]*json.RawMessage `json:"data"`
+	Route    string      `json:"route"`
+	Interval int         `json:"interval"`
+	Msg      UnknownJSON `json:"data"`
 }
 
 func (wsd *WSConfig) stringify() string {
-	bytes, err := json.Marshal(wsd.Data)
+	bytes, err := json.Marshal(wsd.Msg)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
@@ -39,7 +41,7 @@ func readConfig(path string) []byte {
 	return raw
 }
 
-func GetWSConfig() []WSConfig {
+func getConfig() []WSConfig {
 	var wsConfig []WSConfig
 
 	err := json.Unmarshal(readConfig(configPath), &wsConfig)
