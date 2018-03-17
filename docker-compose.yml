@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+
+  mock-client:
+    build: ./mock-client
+    restart: always
+    networks:
+      - webnet
+    volumes:
+      - ./mock-client:/mock-client
+    ports:
+      - 8080:80
+
+  server:
+    build: ./server
+    restart: always
+    networks:
+      - webnet
+    volumes:
+      - ./server:/server
+    
+networks:
+
+  webnet:
