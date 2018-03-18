@@ -9,16 +9,25 @@ services:
       - webnet
     volumes:
       - ./mock-client:/mock-client
-    ports:
-      - 8080:80
 
-  server:
-    build: ./server
+  mock-backend:
+    build: ./mock-backend
     restart: always
     networks:
       - webnet
     volumes:
-      - ./server:/server
+      - ./mock-backend:/mock-backend
+
+  nginx:
+    build: ./nginx
+    restart: always
+    depends_on:
+      - mock-client
+      - mock-backend
+    networks:
+      - webnet
+    ports:
+      - 3000:80
     
 networks:
 

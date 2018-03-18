@@ -1,0 +1,9 @@
+version: '3.5'
+
+services:
+  mock-client:
+    command: npm run dev
+    volumes:
+      - ./mock-client:/mock-client
+    ports:
+      - 8080:8080
