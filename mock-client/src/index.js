@@ -12,20 +12,30 @@ export default class App extends Component {
 
 	addBroadcaster = route => fetch(`/api/${route}`, { method: 'POST' })
 		.then(res => res.ok && this.setState(state => ({
-			broadcasters: [...state.broadcasters, { route }]
+			broadcasters: [...state.broadcasters, { route, socket: new WebSocket(`ws://${location.host}/${route}`) }]
 		})))
+
+	removeBroadcaster = route => fetch(`/api/${route}`, { method: 'DELETE' })
+		.then(res => res.ok && this.setState(state => {
+			const isToBeRemoved = broadcaster => broadcaster.route === route;
+			state.broadcasters.forEach(broadcaster => isToBeRemoved(broadcaster) && broadcaster.socket.close());
+			return { broadcasters: state.broadcasters.filter(isToBeRemoved) };
+		}))
 
 	render(_, { broadcasters }) {
 		return (
 			<div>
 				<Header addBroadcaster={this.addBroadcaster} />
 				<div class="container is-fluid">
-					<div class="columns is-multiline">{broadcasters ? broadcasters.map(
-						({ route }) => <Broadcaster route={route} />
-					) : <p class="title">No broadcasters</p>
-					}</div>
+					{broadcasters.length ?
+						<div class="columns is-multiline">
+							{broadcasters.map(
+								broadcaster => <Broadcaster broadcaster={broadcaster} />
+							)}
+						</div> : <p class="has-text-centered is-size-4 broadcasters-empty">No broadcasters</p>
+					}
 				</div>
-			</div>
+			</div >
 		);
 	}
 }
