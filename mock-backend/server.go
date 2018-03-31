@@ -6,7 +6,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const prefix = "/api"
+const (
+	apiPrefix = "/api"
+	wsPrefix  = "/ws"
+)
 
 type Server struct {
 	mux           *mux.Router
@@ -21,9 +24,9 @@ func NewServer() *Server {
 
 	m := server.mux
 
-	m.HandleFunc(prefix+"/{route}", server.addHandler).Methods(http.MethodPost)
-	m.HandleFunc(prefix+"/{route}", server.deleteHandler).Methods(http.MethodDelete)
-	m.HandleFunc(prefix+"/{route}", server.handleRoute)
+	m.HandleFunc(apiPrefix+"/{route}", server.addHandler).Methods(http.MethodPost)
+	m.HandleFunc(apiPrefix+"/{route}", server.deleteHandler).Methods(http.MethodDelete)
+	m.HandleFunc(wsPrefix+"/{route}", server.handleRoute)
 
 	return server
 }

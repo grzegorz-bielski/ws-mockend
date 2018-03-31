@@ -12,7 +12,10 @@ export default class App extends Component {
 
 	addBroadcaster = route => fetch(`/api/${route}`, { method: 'POST' })
 		.then(res => res.ok && this.setState(state => ({
-			broadcasters: [...state.broadcasters, { route, socket: new WebSocket(`ws://${location.host}/${route}`) }]
+			broadcasters:
+				state.broadcasters.every(broadcaster => broadcaster.route !== route)
+					? [...state.broadcasters, { route, socket: new WebSocket(`ws://${location.host}/ws/${route}`) }]
+					: state.broadcasters
 		})))
 
 	removeBroadcaster = route => fetch(`/api/${route}`, { method: 'DELETE' })
@@ -30,9 +33,17 @@ export default class App extends Component {
 					{broadcasters.length ?
 						<div class="columns is-multiline">
 							{broadcasters.map(
-								broadcaster => <Broadcaster broadcaster={broadcaster} />
+								broadcaster => (
+									<Broadcaster
+										broadcaster={broadcaster}
+										removeBroadcaster={this.removeBroadcaster}
+									/>
+								)
 							)}
-						</div> : <p class="has-text-centered is-size-4 broadcasters-empty">No broadcasters</p>
+						</div> :
+						<p class="has-text-centered is-size-3 broadcasters-empty">
+							No broadcasters
+						</p>
 					}
 				</div>
 			</div >
