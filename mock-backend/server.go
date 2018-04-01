@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -66,10 +67,12 @@ func (s *Server) addHandler(res http.ResponseWriter, req *http.Request) {
 
 func (s *Server) deleteHandler(res http.ResponseWriter, req *http.Request) {
 	route := mux.Vars(req)["route"]
-	handler := s.RouteHandlers[route]
+	fmt.Println("called", route)
 
-	handler.close <- true
-	s.RouteHandlers[route] = nil
+	if handler, ok := s.RouteHandlers[route]; ok {
+		handler.close <- true
+		delete(s.RouteHandlers, route)
+	}
 
 	res.WriteHeader(http.StatusNoContent)
 }

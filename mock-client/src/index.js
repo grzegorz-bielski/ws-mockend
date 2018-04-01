@@ -20,9 +20,8 @@ export default class App extends Component {
 
 	removeBroadcaster = route => fetch(`/api/${route}`, { method: 'DELETE' })
 		.then(res => res.ok && this.setState(state => {
-			const isToBeRemoved = broadcaster => broadcaster.route === route;
-			state.broadcasters.forEach(broadcaster => isToBeRemoved(broadcaster) && broadcaster.socket.close());
-			return { broadcasters: state.broadcasters.filter(isToBeRemoved) };
+			state.broadcasters.forEach(broadcaster => broadcaster.route === route && broadcaster.socket.close());
+			return { broadcasters: state.broadcasters.filter(broadcaster => broadcaster.route !== route) };
 		}))
 
 	render(_, { broadcasters }) {

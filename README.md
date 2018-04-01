@@ -1,8 +1,8 @@
-### ws server for your mocking needs
+### ws echo server for your mocking needs
 
 ~ work in progress
 
-Test your websocket based application with ease. This app is developed to be used in localhost enviroment as a tool during development process.
+Test your websocket based application with ease. This app is developed to be used in localhost environment as a tool during development process. Dockerized and ready to **Go**.
 
 
 ### How to
@@ -16,7 +16,6 @@ make prod
 4. Add new route and send JSON to each client listening on that socket
 
 ### todo
-- handle non-json msg error
 - fix deleting handlers
 - add response preview
 - minor layout fixes

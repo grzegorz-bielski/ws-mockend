@@ -39,6 +39,7 @@ func newBroadcaster() *Broadcaster {
 		broadcast: make(chan UnknownJSON),
 		join:      make(chan *client),
 		leave:     make(chan *client),
+		close:     make(chan bool),
 		clients:   make(map[*client]bool),
 	}
 }
