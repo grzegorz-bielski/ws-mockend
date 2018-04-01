@@ -16,8 +16,12 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
+// UnknownJSON represents JSON send from mock-client
+// to be broadcasted to other clients
 type UnknownJSON = map[string]*json.RawMessage
 
+// Broadcaster takes care of sending/receiving messages
+// from all conntected clients on given route
 type Broadcaster struct {
 	broadcast chan UnknownJSON
 

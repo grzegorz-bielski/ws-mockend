@@ -20,7 +20,7 @@ class Broadcaster extends Component {
 			<div class="column is-one-quarter">
 				<article class="message">
 					<div class="message-header">
-						<h3>/api/{broadcaster.route}</h3>
+						<h3>/ws/{broadcaster.route}</h3>
 						<button class="delete" aria-label="delete" onClick={this.handleRemove} />
 					</div>
 					<div class="message-body">

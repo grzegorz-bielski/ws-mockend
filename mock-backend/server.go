@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -17,6 +18,10 @@ type Server struct {
 	RouteHandlers map[string]*Broadcaster
 }
 
+type routeHandlers struct {
+	Names []string
+}
+
 // NewServer creates a new Server instance
 func NewServer() *Server {
 	server := &Server{
@@ -26,6 +31,7 @@ func NewServer() *Server {
 
 	m := server.mux
 
+	m.HandleFunc(apiPrefix+"/routes", server.getHandlers).Methods(http.MethodGet)
 	m.HandleFunc(apiPrefix+"/{route}", server.addHandler).Methods(http.MethodPost)
 	m.HandleFunc(apiPrefix+"/{route}", server.deleteHandler).Methods(http.MethodDelete)
 	m.HandleFunc(wsPrefix+"/{route}", server.handleRoute)
@@ -35,6 +41,17 @@ func NewServer() *Server {
 
 func (s *Server) listen(host string) {
 	http.ListenAndServe(host, s.mux)
+}
+
+func (s *Server) getHandlers(res http.ResponseWriter, req *http.Request) {
+	var handlers = routeHandlers{}
+
+	for route := range s.RouteHandlers {
+		handlers.Names = append(handlers.Names, route)
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(res).Encode(handlers)
 }
 
 func (s *Server) addHandler(res http.ResponseWriter, req *http.Request) {
