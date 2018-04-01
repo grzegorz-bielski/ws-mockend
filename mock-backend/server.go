@@ -11,11 +11,13 @@ const (
 	wsPrefix  = "/ws"
 )
 
+// Server encapsulates all logic behind one server instance
 type Server struct {
 	mux           *mux.Router
 	RouteHandlers map[string]*Broadcaster
 }
 
+// NewServer creates a new Server instance
 func NewServer() *Server {
 	server := &Server{
 		mux:           mux.NewRouter(),

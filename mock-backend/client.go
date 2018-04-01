@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -19,7 +22,9 @@ func (c *client) read() {
 		var response UnknownJSON
 		err := c.socket.ReadJSON(&response)
 		if err != nil {
-			return
+			fmt.Println(err)
+			errMsg := []byte(`{ "err": "` + err.Error() + `" }`)
+			json.Unmarshal(errMsg, &response)
 		}
 
 		c.broadcaster.broadcast <- response
