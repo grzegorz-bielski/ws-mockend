@@ -18,7 +18,7 @@ class Broadcaster extends Component {
 		return (
 			<div class="column is-half">
 				<article class="message broadcaster">
-					<div class="message-header">
+					<div class="message-header is-primary">
 						<h3>/ws/{broadcaster.route}</h3>
 						<button class="delete" aria-label="delete" onClick={this.handleRemove} />
 					</div>
@@ -33,7 +33,7 @@ class Broadcaster extends Component {
 								/>
 							</div>
 							<div class="control">
-								<button class="button">
+								<button class="button broadcast-btn is-warning">
 									Broadcast
 								</button>
 							</div>

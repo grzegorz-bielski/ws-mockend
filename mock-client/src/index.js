@@ -14,7 +14,7 @@ export default class App extends Component {
 
 	getBroadcasters = () => fetch('/api/routes')
 		.then(res => res.ok && res.json())
-		.then(({ Names }) => this.setState({ broadcasters: Names.map(route => createWSHandler(route)) }));
+		.then(({ Names }) => Names && this.setState({ broadcasters: Names.map(route => createWSHandler(route)) }));
 
 	addBroadcaster = route => fetch(`/api/${route}`, { method: 'POST' })
 		.then(res => res.ok && this.setState(state => ({
@@ -38,7 +38,7 @@ export default class App extends Component {
 		return (
 			<div>
 				<Header addBroadcaster={this.addBroadcaster} />
-				<div class="container is-fluid">
+				<div class="container is-fluid broadcaster-container">
 					{broadcasters.length ?
 						<div class="columns is-multiline">
 							{broadcasters.map(

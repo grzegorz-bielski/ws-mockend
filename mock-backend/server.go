@@ -45,7 +45,7 @@ func (s *Server) listen(host string) {
 }
 
 func (s *Server) getHandlers(res http.ResponseWriter, req *http.Request) {
-	var handlers = routeHandlers{}
+	handlers := routeHandlers{}
 
 	for route := range s.RouteHandlers {
 		handlers.Names = append(handlers.Names, route)
@@ -61,7 +61,7 @@ func (s *Server) addHandler(res http.ResponseWriter, req *http.Request) {
 
 	s.RouteHandlers[route] = broadcaster
 	go broadcaster.run()
-	fmt.Println("Created ", route, " handler")
+	fmt.Println("Created '", route, "' handler.")
 
 	res.WriteHeader(http.StatusOK)
 }
@@ -71,8 +71,8 @@ func (s *Server) deleteHandler(res http.ResponseWriter, req *http.Request) {
 
 	if handler, ok := s.RouteHandlers[route]; ok {
 		handler.close <- true
-		s.RouteHandlers[route] = nil
-		fmt.Println("deleted ", route, " handler")
+		delete(s.RouteHandlers, route)
+		fmt.Println("Deleted '", route, "' handler.")
 	}
 
 	res.WriteHeader(http.StatusNoContent)

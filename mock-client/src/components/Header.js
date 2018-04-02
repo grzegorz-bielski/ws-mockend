@@ -3,7 +3,7 @@ import { h } from 'preact';
 import AddForm from './AddForm';
 
 const Header = ({ addBroadcaster }) => (
-	<header class="hero is-dark is-bold">
+	<header class="hero is-warning">
 		<div class="hero-body">
 			<div class="level">
 				<div class="level-left">
