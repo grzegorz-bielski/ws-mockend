@@ -16,6 +16,4 @@ make prod
 4. Add new route and send JSON to each client listening on that socket
 
 ### todo
-- fix deleting handlers
-- add response preview
-- minor layout fixes
+- add response preview to each handler

@@ -61,17 +61,18 @@ func (s *Server) addHandler(res http.ResponseWriter, req *http.Request) {
 
 	s.RouteHandlers[route] = broadcaster
 	go broadcaster.run()
+	fmt.Println("Created ", route, " handler")
 
 	res.WriteHeader(http.StatusOK)
 }
 
 func (s *Server) deleteHandler(res http.ResponseWriter, req *http.Request) {
 	route := mux.Vars(req)["route"]
-	fmt.Println("called", route)
 
 	if handler, ok := s.RouteHandlers[route]; ok {
 		handler.close <- true
-		delete(s.RouteHandlers, route)
+		s.RouteHandlers[route] = nil
+		fmt.Println("deleted ", route, " handler")
 	}
 
 	res.WriteHeader(http.StatusNoContent)

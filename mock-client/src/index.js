@@ -5,24 +5,34 @@ import './style';
 import Header from './components/Header';
 import Broadcaster from './components/Broadcaster';
 
+const createWSHandler = route => ({ route, socket: new WebSocket(`ws://${location.host}/ws/${route}`) });
+
 export default class App extends Component {
 	state = {
 		broadcasters: []
 	}
 
+	getBroadcasters = () => fetch('/api/routes')
+		.then(res => res.ok && res.json())
+		.then(({ Names }) => this.setState({ broadcasters: Names.map(route => createWSHandler(route)) }));
+
 	addBroadcaster = route => fetch(`/api/${route}`, { method: 'POST' })
 		.then(res => res.ok && this.setState(state => ({
 			broadcasters:
 				state.broadcasters.every(broadcaster => broadcaster.route !== route)
-					? [...state.broadcasters, { route, socket: new WebSocket(`ws://${location.host}/ws/${route}`) }]
+					? [...state.broadcasters, createWSHandler(route)]
 					: state.broadcasters
-		})))
+		})));
 
 	removeBroadcaster = route => fetch(`/api/${route}`, { method: 'DELETE' })
 		.then(res => res.ok && this.setState(state => {
 			state.broadcasters.forEach(broadcaster => broadcaster.route === route && broadcaster.socket.close());
 			return { broadcasters: state.broadcasters.filter(broadcaster => broadcaster.route !== route) };
-		}))
+		}));
+
+	componentDidMount() {
+		this.getBroadcasters();
+	}
 
 	render(_, { broadcasters }) {
 		return (
